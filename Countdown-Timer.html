@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Countdown Timer</title>
+  </head>
+  <body>
+    <div>
+      <label for="hour">HH:</label>
+      <input
+        type="number"
+        id="hour"
+        min="0"
+        max="99"
+        oninput="setMaxInput(this, 99)"
+      />
+      <label for="minute">MM:</label>
+      <input
+        type="number"
+        id="minute"
+        min="0"
+        max="59"
+        oninput="setMaxInput(this, 59)"
+      />
+      <label for="second">SS:</label>
+      <input
+        type="number"
+        id="second"
+        min="0"
+        max="59"
+        oninput="setMaxInput(this, 59)"
+      />
+    </div>
+    <div id="demo">00:00:00</div>
+    <button id="startBtn" onclick="startCountdownFromInput()">Start</button>
+
+    <script>
+      // 限制輸入數字的最大值
+      function setMaxInput(input, maxValue) {
+        if (input.value > maxValue) {
+          input.value = maxValue;
+        }
+      }
+
+      // 輸入時間
+      function startCountdownFromInput() {
+        let hr = parseInt(document.getElementById("hour").value) || 0;
+        let min = parseInt(document.getElementById("minute").value) || 0;
+        let sec = parseInt(document.getElementById("second").value) || 0;
+        startCountdown(hr, min, sec);
+      }
+
+      // 倒數
+      let interval;
+      function startCountdown(hr, min, sec) {
+        if (interval) {
+          return; // 避免重複倒數
+        }
+
+        interval = setInterval(function () {
+          if (hr === 0 && min === 0 && sec === 0) {
+            clearInterval(interval); // 停止倒數
+            interval = null; // 重置
+            return;
+          }
+
+          if (sec > 0) {
+            sec--;
+          } else {
+            sec = 59;
+            if (min > 0) {
+              min--;
+            } else {
+              min = 59;
+              if (hr > 0) {
+                hr--;
+              }
+            }
+          }
+          document.getElementById("demo").innerHTML = formatTime(hr, min, sec);
+        }, 1000);
+      }
+
+      // hh:mm:ss 格式
+      function formatTime(hr, min, sec) {
+        return (
+          hr.toString().padStart(2, "0") +
+          ":" +
+          min.toString().padStart(2, "0") +
+          ":" +
+          sec.toString().padStart(2, "0")
+        );
+      }
+    </script>
+  </body>
+</html>
